@@ -10,33 +10,33 @@ using System.Linq;
 
 namespace LibApp_Gr3.Controllers.API
 {
-    [Route("api/books")]
+    [Route("api/customers")]
     [ApiController]
-    public class BookApiController : ControllerBase
+    public class CustomersApiController : ControllerBase
     {
-        protected BookService BookService { get; }
+        protected CustomerService CustomerService { get; }
         protected IMapper Mapper { get; }
-        public BookApiController(BookService bookService, IMapper mapper)
+        public CustomersApiController(CustomerService customerService, IMapper mapper)
         {
-            BookService = bookService;
+            CustomerService = customerService;
             Mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<List<BookDTO>> GetList()
+        public ActionResult<List<CustomerDTO>> GetList()
         {
-            var _bookList = BookService.GetList();
+            var _customerList = CustomerService.GetList();
 
-            if (_bookList == null || _bookList.Count() == 0)
+            if (_customerList == null || _customerList.Count() == 0)
                 return NotFound();
 
-            return Ok(Mapper.Map<IEnumerable<Book>, IEnumerable<BookDTO>>(_bookList));
+            return Ok(Mapper.Map<IEnumerable<Customer>, IEnumerable<CustomerDTO>>(_customerList));
         }
 
         [HttpGet("{id}")]
-        public ActionResult<BookDTO> GetItem([FromRoute]int id)
+        public ActionResult<CustomerDTO> GetItem([FromRoute] int id)
         {
-            var _item = BookService.GetItem(id);
+            var _item = CustomerService.GetItem(id);
 
             if (_item == null)
                 return NotFound();
@@ -45,12 +45,12 @@ namespace LibApp_Gr3.Controllers.API
         }
 
         [HttpPost]
-        public ActionResult Insert([FromBody]BookDTO insert)
+        public ActionResult Insert([FromBody] CustomerDTO insert)
         {
             try
             {
-                var _insert = Mapper.Map<Book>(insert);
-                BookService.Insert(_insert);
+                var _insert = Mapper.Map<Customer>(insert);
+                CustomerService.Insert(_insert);
 
                 return Ok();
             }
@@ -61,31 +61,31 @@ namespace LibApp_Gr3.Controllers.API
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update([FromRoute]int id, [FromBody]BookDTO update)
+        public ActionResult Update([FromRoute] int id, [FromBody] CustomerDTO update)
         {
             try
             {
-                var _update = Mapper.Map<Book>(update);
-                BookService.Update(id, _update);
+                var _update = Mapper.Map<Customer>(update);
+                CustomerService.Update(id, _update);
 
                 return Ok();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Remove([FromRoute]int id)
+        public ActionResult Remove([FromRoute] int id)
         {
             try
             {
-                BookService.Remove(id);
+                CustomerService.Remove(id);
 
                 return Ok();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

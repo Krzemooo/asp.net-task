@@ -42,6 +42,7 @@ namespace LibApp_Gr3
             services.AddControllersWithViews();
 
             services.AddTransient<BookService>();
+            services.AddTransient<CustomerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

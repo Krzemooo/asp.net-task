@@ -20,34 +20,34 @@ namespace LibApp_Gr3.Models
                 else
                 {
                     context.MembershipTypes.AddRange(
-                        new MembershipType
-                        {
-                            Id = 1,
-                            SignUpFee = 0,
-                            DurationInMonths = 0,
-                            DiscountRate = 0
-                        },
-                        new MembershipType
-                        {
-                            Id = 2,
-                            SignUpFee = 30,
-                            DurationInMonths = 1,
-                            DiscountRate = 10
-                        },
-                        new MembershipType
-                        {
-                            Id = 3,
-                            SignUpFee = 90,
-                            DurationInMonths = 3,
-                            DiscountRate = 15
-                        },
-                        new MembershipType
-                        {
-                            Id = 4,
-                            SignUpFee = 300,
-                            DurationInMonths = 12,
-                            DiscountRate = 20
-                        });
+                          new MembershipType
+                          {
+                              Id = 1,
+                              SignUpFee = 0,
+                              DurationInMonths = 0,
+                              DiscountRate = 0
+                          },
+                          new MembershipType
+                          {
+                              Id = 2,
+                              SignUpFee = 30,
+                              DurationInMonths = 1,
+                              DiscountRate = 10
+                          },
+                          new MembershipType
+                          {
+                              Id = 3,
+                              SignUpFee = 90,
+                              DurationInMonths = 3,
+                              DiscountRate = 15
+                          },
+                          new MembershipType
+                          {
+                              Id = 4,
+                              SignUpFee = 300,
+                              DurationInMonths = 12,
+                              DiscountRate = 20
+                          });
                 }
                 if (context.Books.Any())
                 {
@@ -87,6 +87,28 @@ namespace LibApp_Gr3.Models
                             NumberInStock = 15,
                             PublicationYear = 2015,
                             PublishingHouse = "Wydawnictwo Naukowe PWN"
+                        });
+                    context.SaveChanges();
+                }
+
+                if (context.Customers.Any())
+                {
+                    Console.WriteLine("Customers table already seeded");
+                }
+                else
+                {
+                    context.Customers.AddRange(
+                        new Customer
+                        {
+                            Name = "Jan Nowak",
+                            HasNewsletterSubscribed = true,
+                            MembershipTypeId = 1,
+                        },
+                        new Customer
+                        {
+                            Name = "Piotr Kowalski",
+                            HasNewsletterSubscribed = false,
+                            MembershipTypeId = 2,
                         });
                     context.SaveChanges();
                 }

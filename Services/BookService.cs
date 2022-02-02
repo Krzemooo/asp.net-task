@@ -1,4 +1,5 @@
-﻿using LibApp_Gr3.Data;
+﻿using AutoMapper;
+using LibApp_Gr3.Data;
 using LibApp_Gr3.Interfaces;
 using LibApp_Gr3.Models;
 using System.Collections.Generic;
@@ -9,13 +10,17 @@ namespace LibApp_Gr3.Services
     public class BookService : IBaseContext<Book>
     {
         protected ApplicationDbContext Context { get; }
-        public BookService(ApplicationDbContext context)
+        protected IMapper Mapper { get; }
+        public BookService(ApplicationDbContext context, IMapper mapper)
         {
             Context = context;
+            Mapper = mapper;
         }
-        public Book GetItem(long id)
+        public Book GetItem(int id)
         {
-            throw new System.NotImplementedException();
+            var _entity = Context.Books.SingleOrDefault(p => p.Id == id);
+
+            return _entity;
         }
 
         public IEnumerable<Book> GetList()
@@ -25,17 +30,32 @@ namespace LibApp_Gr3.Services
 
         public void Insert(Book item)
         {
-            throw new System.NotImplementedException();
+            Context.Books.Add(item);
+
+            Context.SaveChanges();
         }
 
-        public void Remove(long id)
+        public void Remove(int id)
         {
-            throw new System.NotImplementedException();
+            var _entity = Context.Books.SingleOrDefault(p => p.Id == id);
+
+            if(_entity == null)
+                throw new KeyNotFoundException();
+
+            Context.Books.Remove(_entity);
+            Context.SaveChanges();
         }
 
-        public void Update(Book item)
+        public void Update(int id, Book item)
         {
-            throw new System.NotImplementedException();
+            var _entity = Context.Books.SingleOrDefault(p => p.Id == id);
+
+            if (_entity == null)
+                throw new KeyNotFoundException();
+
+            Mapper.Map(item, _entity);
+
+            Context.Books.Update(_entity);
         }
     }
 }
