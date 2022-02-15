@@ -10,7 +10,6 @@
     <tr>
         <th>Customer</th>
         <th>Discount Rate</th>
-        <th>Delete</th>
     </tr>
     </thead>
     <tbody>
@@ -31,17 +30,11 @@
                     {
                         data: "name",
                         render: function (data, type, customer) {
-                            return "<a href='customers/description/" + customer.id + "'>" + customer.name + "</a>";
+                            return "<a href='customers/details/" + customer.id + "'>" + customer.name + "</a>";
                         }
                     },
                     {
                         data: "membershipType.discountRate"
-                    },
-                    {
-                        data: "id",
-                        render: function (data) {
-                            return "<button class='btn btn-secondary js-delete' data-customer-id=" + data + ">Delete</button>";
-                        }
                     }
                 ]
             });

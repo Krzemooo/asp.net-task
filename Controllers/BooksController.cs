@@ -5,11 +5,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using LibApp_Gr3.Models;
 using LibApp_Gr3.ViewModels;
+using LibApp_Gr3.Services;
 
 namespace LibApp_Gr3.Controllers
 {
     public class BooksController : Controller
     {
+        protected BookService BookService { get; }
+        public BooksController(BookService bookService)
+        {
+            BookService = bookService;
+        }
         public IActionResult Random()
         {
             var firstBook = new Book() { Name = "English dictionary" };
@@ -39,6 +45,49 @@ namespace LibApp_Gr3.Controllers
             var books = GetBooks();
 
             return View(books);
+        }
+
+        public IActionResult Form(int? id)
+        {
+            if (id.HasValue)
+            {
+                var _entity = BookService.GetItem(id.Value);
+                return View(new BookFormViewModel(_entity));
+            }
+            else
+            {
+                return View(new BookFormViewModel());
+            }
+        }
+
+        public IActionResult Details(int id)
+        {
+            var _entity = BookService.GetItem(id);
+
+            return View(_entity);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Save(Book book)
+        {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new BookFormViewModel(book);
+
+                return View("CustomerForm", viewModel);
+            }
+
+            if (book.Id == 0)
+            {
+                BookService.Insert(book);
+            }
+            else
+            {
+                BookService.Update(book.Id, book);
+            }
+
+            return RedirectToAction("Index", "Books");
         }
 
         [Route("books/released/{year:regex(^\\d{{4}}$)}/{month:range(1, 12)}")]

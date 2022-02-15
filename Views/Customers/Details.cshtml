@@ -5,9 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@Model.Name</h2>
 <ul>
-    <li>SignUpFee:  @Model.MembershipType.SignUpFee</li>
+    <li>Name:  @Model.Name</li>
     <li>Newsletter Subscribed: @Model.HasNewsletterSubscribed.ToString()</li>
 </ul>
-<button class='btn btn-secondary' data-customer-id="@Model.Id">Edit</button>
+<a class='btn btn-secondary' asp-route-id="@Model.Id"  asp-action="Form">Edit</a>

@@ -43,6 +43,7 @@ namespace LibApp_Gr3
 
             services.AddTransient<BookService>();
             services.AddTransient<CustomerService>();
+            services.AddTransient<MembershipTypeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

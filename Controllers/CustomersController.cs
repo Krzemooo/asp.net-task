@@ -12,9 +12,11 @@ namespace LibApp_Gr3.Controllers
     public class CustomersController : Controller
     {
         protected CustomerService CustomerService { get; }
-        public CustomersController(CustomerService customerService)
+        protected MembershipTypeService MembershipTypeService { get; }
+        public CustomersController(CustomerService customerService, MembershipTypeService membershipTypeService)
         {
             CustomerService = customerService;
+            MembershipTypeService = membershipTypeService;
         }
         public ViewResult Index()
         {
@@ -30,15 +32,47 @@ namespace LibApp_Gr3.Controllers
 
         public IActionResult Form(int? id)
         {
-            if(id.HasValue)
+            if (id.HasValue)
             {
                 var _entity = CustomerService.GetItem(id.Value);
-                return View(_entity);
+                return View(new CustomerFormViewModel(_entity)
+                {
+                    MembershipTypes = MembershipTypeService.GetList()
+                });
             }
             else
             {
-                return View(null);
+                return View(new CustomerFormViewModel()
+                {
+                    MembershipTypes = MembershipTypeService.GetList()
+                });
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Save(Customer customer)
+        {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new CustomerFormViewModel(customer)
+                {
+                    MembershipTypes = MembershipTypeService.GetList()
+                };
+
+                return View("CustomerForm", viewModel);
+            }
+
+            if (customer.Id == 0)
+            {
+                CustomerService.Insert(customer);
+            }
+            else
+            {
+                CustomerService.Update(customer.Id, customer);
+            }
+
+            return RedirectToAction("Index", "Customers");
         }
     }
 }

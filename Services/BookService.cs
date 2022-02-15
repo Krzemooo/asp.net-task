@@ -2,6 +2,7 @@
 using LibApp_Gr3.Data;
 using LibApp_Gr3.Interfaces;
 using LibApp_Gr3.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -48,14 +49,15 @@ namespace LibApp_Gr3.Services
 
         public void Update(int id, Book item)
         {
-            var _entity = Context.Books.SingleOrDefault(p => p.Id == id);
+            var _entity = Context.Books.AsNoTracking().SingleOrDefault(p => p.Id == id);
 
             if (_entity == null)
                 throw new KeyNotFoundException();
 
-            Mapper.Map(item, _entity);
+            _entity = Mapper.Map(item, _entity);
 
             Context.Books.Update(_entity);
+            Context.SaveChanges();
         }
     }
 }
